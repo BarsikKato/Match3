@@ -1,0 +1,45 @@
+using Core.Abstractions;
+using System.Collections;
+using UnityEngine;
+
+namespace Core.Items
+{
+    public sealed class GameItem : MonoBehaviour, IGameItem
+    {
+        private const float SwapTime = 0.25f;
+
+        [SerializeField] private SpriteRenderer spriteRenderer;
+
+        private int _type;
+        public int Type => _type;
+
+        public void SetPositionTo(Vector2 position)
+        {
+            
+            StartCoroutine(MoveToPositionRoutine(position));
+        }
+
+        private IEnumerator MoveToPositionRoutine(Vector2 position)
+        {
+            float time = 0;
+            Vector2 startPosition = transform.position;
+            while (time < 1)
+            {
+                transform.position = Vector2.Lerp(startPosition, position, time);
+                time += Time.deltaTime / SwapTime;
+                yield return null;
+            }
+        }
+
+        public void SetVisible(bool value)
+        {
+            spriteRenderer.enabled = value;
+        }
+
+        public void SetType(int type, Sprite sprite)
+        {
+            _type = type;
+            spriteRenderer.sprite = sprite;
+        }
+    }
+}
