@@ -1,6 +1,7 @@
 using Core.Abstractions;
 using Core.Items;
 using DependencyResolving;
+using Extensions;
 using UnityEngine;
 
 namespace Core.Fill
@@ -37,7 +38,7 @@ namespace Core.Fill
 
                     tile.SetItem(item);
                     Vector2 worldPosition = _gameBoard.GetWorldPosition(boardPosition);
-                    item.SetPositionTo(worldPosition);
+                    item.SetPositionTo(worldPosition).FullyIterate();
                 }
             }
         }
