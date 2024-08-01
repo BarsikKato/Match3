@@ -108,8 +108,6 @@ namespace Core.Board
 
         private IEnumerator SwapAndMatchTilesRoutine(IGameTile tileA, IGameTile tileB)
         {
-            yield return new WaitForSeconds(5f);
-
             yield return SwapTilesRoutine(tileA, tileB);
 
             bool isMatching = _matchStrategy.TryMatch(
