@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Core.Abstractions
@@ -6,7 +7,7 @@ namespace Core.Abstractions
     {
         int Type { get; }
 
-        void SetPositionTo(Vector2 position);
+        IEnumerator SetPositionTo(Vector2 position);
 
         void SetVisible(bool value);
 

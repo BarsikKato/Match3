@@ -1,9 +1,11 @@
 using Core.Abstractions;
 using Core.Fill;
+using Core.Tiles;
 using Core.Tiles.Factory;
 using DependencyResolving;
+using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Core.Board
@@ -101,19 +103,12 @@ namespace Core.Board
 
         public void SwapTiles(IGameTile tileA, IGameTile tileB)
         {
-            SwapTest(tileA, tileB);
+            StartCoroutine(SwapAndMatchTilesRoutine(tileA, tileB));
         }
 
-        private async void SwapTest(IGameTile tileA, IGameTile tileB)
+        private IEnumerator SwapAndMatchTilesRoutine(IGameTile tileA, IGameTile tileB)
         {
-            await Task.Delay(5000);
-
-            IGameItem itemA = tileA.CurrentItem;
-            IGameItem itemB = tileB.CurrentItem;
-            tileA.SetItem(itemB);
-            itemB.SetPositionTo(GetWorldPosition(tileA.Row, tileA.Column));
-            tileB.SetItem(itemA);
-            itemA.SetPositionTo(GetWorldPosition(tileB.Row, tileB.Column));
+            yield return SwapTilesRoutine(tileA, tileB);
 
             bool isMatching = _matchStrategy.TryMatch(
                 tileA, tileB, out var matchA, out var matchB);
@@ -123,6 +118,37 @@ namespace Core.Board
                 ClearMatchedTiles(matchA);
                 ClearMatchedTiles(matchB);
             }
+            else
+            {
+                // Reverse movement
+                yield return SwapTilesRoutine(tileA, tileB);
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private IEnumerator SwapTilesRoutine(IGameTile tileA, IGameTile tileB)
+        {
+            Coroutine[] tileMovingCoroutines = SwapTilesAndGetMovementCoroutines(tileA, tileB);
+            foreach (Coroutine coroutine in tileMovingCoroutines)
+            {
+                yield return coroutine;
+            }
+        }
+
+        private Coroutine[] SwapTilesAndGetMovementCoroutines(IGameTile tileA, IGameTile tileB)
+        {
+            IGameItem itemA = tileA.CurrentItem;
+            IGameItem itemB = tileB.CurrentItem;
+
+            tileA.SetItem(itemB);
+            tileB.SetItem(itemA);
+
+            Vector2 tileAWorldPosition = this.GetWorldPosition(tileA.GetBoardPosition());
+            Vector2 tileBWorldPosition = this.GetWorldPosition(tileB.GetBoardPosition());
+
+            Coroutine moveItemB = StartCoroutine(itemB.SetPositionTo(tileAWorldPosition));
+            Coroutine moveItemA = StartCoroutine(itemA.SetPositionTo(tileBWorldPosition));
+            return new Coroutine[] { moveItemA, moveItemB };
         }
 
         private void ClearMatchedTiles(IReadOnlyCollection<IGameTile> matchingTiles)

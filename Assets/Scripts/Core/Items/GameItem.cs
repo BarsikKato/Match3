@@ -13,22 +13,18 @@ namespace Core.Items
         private int _type;
         public int Type => _type;
 
-        public void SetPositionTo(Vector2 position)
-        {
-            
-            StartCoroutine(MoveToPositionRoutine(position));
-        }
-
-        private IEnumerator MoveToPositionRoutine(Vector2 position)
+        public IEnumerator SetPositionTo(Vector2 position)
         {
             float time = 0;
             Vector2 startPosition = transform.position;
-            while (time < 1)
+            while (time <= 1)
             {
                 transform.position = Vector2.Lerp(startPosition, position, time);
                 time += Time.deltaTime / SwapTime;
                 yield return null;
             }
+
+            transform.position = position;
         }
 
         public void SetVisible(bool value)
