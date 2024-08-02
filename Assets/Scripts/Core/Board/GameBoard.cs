@@ -79,7 +79,7 @@ namespace Core.Board
 
         public Vector2 GetWorldPosition(int row, int column)
         {
-            return _tileOrigin + new Vector2(row * _tileSize.x, column * -_tileSize.y);
+            return _tileOrigin + new Vector2(column * _tileSize.x, row * -_tileSize.y);
         }
 
         public IGameTile GetTile(int row, int column)
@@ -162,6 +162,13 @@ namespace Core.Board
         public void SetMatchStrategy(IMatchStrategy matchStrategy)
         {
             _matchStrategy = matchStrategy;
+        }
+
+        public bool TryGetBoardPosition(Vector2 worldPosition, out int row, out int column)
+        {
+            row = (int)(-(worldPosition - _tileOrigin).y / _tileSize.y);
+            column = (int)((worldPosition - _tileOrigin).x / _tileSize.x);
+            return row >= 0 && column >= 0;
         }
     }
 }

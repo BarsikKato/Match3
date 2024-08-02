@@ -66,5 +66,10 @@ namespace Core
         {
             return (boardPosition.Row, boardPosition.Column);
         }
+
+        public override string ToString()
+        {
+            return $"({Row}, {Column})";
+        }
     }
 }
