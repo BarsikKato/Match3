@@ -52,16 +52,17 @@ namespace Core.Fill
 
                         tile.SetItem(upItem);
                         MoveItemDown(upItem, tile);
-                        continue;
                     }
+                    else
+                    {
+                        IGameItem item = _gameItemPool.GetItem();
+                        item.SetPositionTo(
+                            _gameBoard.GetWorldPosition(generatorPosition)).FullyIterate();
 
-                    IGameItem item = _gameItemPool.GetItem();
-                    item.SetPositionTo(
-                        _gameBoard.GetWorldPosition(generatorPosition));
-
-                    tile.SetItem(item);
-                    Vector2 worldPosition = _gameBoard.GetWorldPosition(boardPosition);
-                    item.SetPositionTo(worldPosition).FullyIterate();
+                        tile.SetItem(item);
+                        Vector2 worldPosition = _gameBoard.GetWorldPosition(boardPosition);
+                        (_gameBoard as MonoBehaviour).StartCoroutine(item.SetPositionTo(worldPosition));
+                    }
                 }
             }
         }

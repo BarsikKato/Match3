@@ -2,6 +2,7 @@ using Core.Abstractions;
 using Core.Items;
 using DependencyResolving;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Core.Match
@@ -39,23 +40,26 @@ namespace Core.Match
 
         private IReadOnlyCollection<IGameTile> FindMatchingTiles(IGameTile tile)
         {
-            List<IGameTile> matchingTiles = new List<IGameTile>();
+            List<IGameTile> verticalTiles = new List<IGameTile>() { tile };
+            List<IGameTile> horizontalTiles = new List<IGameTile>();
             foreach (var direction in _directions)
             {
-                IReadOnlyCollection<IGameTile> directionTiles = 
-                    FindMatchingTilesInDirection(tile, direction);
+                List<IGameTile> matchingList = 
+                    direction.Equals(BoardPosition.Up) || direction.Equals(BoardPosition.Down)
+                    ? verticalTiles 
+                    : horizontalTiles;
 
-                if (directionTiles.Count >= requiredCount)
-                    matchingTiles.AddRange(directionTiles);
+                    FindMatchingTilesInDirection(tile, direction, matchingList);
             }
 
-            return matchingTiles;
+            return verticalTiles
+                .Concat(horizontalTiles)
+                .ToList();
         }
 
-        private IReadOnlyCollection<IGameTile> FindMatchingTilesInDirection(
-            IGameTile tile, BoardPosition direction)
+        private void FindMatchingTilesInDirection(
+            IGameTile tile, BoardPosition direction, List<IGameTile> matchingTiles)
         {
-            List<IGameTile> matchingTiles = new() { tile };
             BoardPosition currentPosition = new BoardPosition(tile.Row, tile.Column);
             while (true)
             {
@@ -67,8 +71,6 @@ namespace Core.Match
                 matchingTiles.Add(nextTile);
                 currentPosition = nextPosition;
             }
-
-            return matchingTiles;
         }
 
         private bool IsTilesMatching(IGameTile tileA, IGameTile tileB) 
