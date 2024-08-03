@@ -15,7 +15,7 @@ namespace Core.Items
         public void Initialize(IDependencyResolver resolver)
         {
             IGameBoard gameBoard = resolver.Resolve<IGameBoard>();
-            CreateItemPool(gameBoard.RowCount * gameBoard.ColumnCount);
+            CreateItemPool(gameBoard.RowCount * gameBoard.ColumnCount * 2);
         }
 
         private void CreateItemPool(int poolSize)
@@ -23,6 +23,7 @@ namespace Core.Items
             for (int i = 0; i < poolSize; i++)
             {
                 IGameItem item = Instantiate(gameItemPrefab, transform);
+                item.SetVisible(false);
                 _itemsPool.Enqueue(item);
             }
         }
@@ -44,6 +45,7 @@ namespace Core.Items
             IReadOnlyList<Sprite> items = gameItemRepository.Items;
             int index = Random.Range(0, items.Count);
             item.SetType(index, items[index]);
+            item.SetVisible(true);
         }
     }
 }

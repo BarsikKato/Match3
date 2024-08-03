@@ -121,6 +121,7 @@ namespace Core.Board
             {
                 ClearMatchedTiles(matchA);
                 ClearMatchedTiles(matchB);
+                Fill();
             }
             else
             {
