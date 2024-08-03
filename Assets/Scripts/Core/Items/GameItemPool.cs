@@ -22,7 +22,7 @@ namespace Core.Items
         {
             for (int i = 0; i < poolSize; i++)
             {
-                IGameItem item = Instantiate(gameItemPrefab);
+                IGameItem item = Instantiate(gameItemPrefab, transform);
                 _itemsPool.Enqueue(item);
             }
         }

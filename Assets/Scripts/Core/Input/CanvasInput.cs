@@ -10,21 +10,22 @@ namespace Core.Input
         public event Action<Vector2> PointerDrag;
 
         [SerializeField] private new Camera camera;
-        [SerializeField] private Canvas canvas;
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            PointerDown?.Invoke(GetWorldPosition(eventData.position));
+            Vector2 position = GetWorldPosition(eventData.position);
+            PointerDown?.Invoke(position);
         }
 
         public void OnDrag(PointerEventData eventData)
         {
-            PointerDrag?.Invoke(GetWorldPosition(eventData.position));
+            Vector2 position = GetWorldPosition(eventData.position);
+            PointerDrag?.Invoke(position);
         }
 
         private Vector2 GetWorldPosition(Vector2 canvasPosition)
         {
-            return camera.ScreenToWorldPoint(canvasPosition * canvas.scaleFactor);
+            return camera.ScreenToWorldPoint(canvasPosition);
         }
     }
 }

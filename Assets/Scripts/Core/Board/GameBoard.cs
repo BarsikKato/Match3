@@ -172,8 +172,9 @@ namespace Core.Board
 
         public bool TryGetBoardPosition(Vector2 worldPosition, out int row, out int column)
         {
-            row = (int)(-(worldPosition - _tileOrigin).y / _tileSize.y);
-            column = (int)((worldPosition - _tileOrigin).x / _tileSize.x);
+            Vector2 halfSize = _tileSize / 2f;
+            row = (int)Mathf.Floor(-(worldPosition - _tileOrigin).y + halfSize.y);
+            column = (int)Mathf.Floor((worldPosition - _tileOrigin).x + halfSize.x);
             return row >= 0 && column >= 0;
         }
     }

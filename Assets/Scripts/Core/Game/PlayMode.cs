@@ -33,7 +33,6 @@ namespace Core.Game
         {
             if (_gameBoard.TryGetBoardPosition(position, out BoardPosition boardPosition))
             {
-                Debug.Log(boardPosition);
                 _lastSelectedTile = _gameBoard.GetTile(boardPosition);
             }
         }
