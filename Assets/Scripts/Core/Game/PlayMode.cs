@@ -19,13 +19,13 @@ namespace Core.Game
 
         public void Enter()
         {
-            _input.PointerClick += Input_PointerClick;
+            _input.PointerDown += Input_PointerClick;
             _input.PointerDrag += Input_PointerDrag;
         }
 
         public void Exit()
         {
-            _input.PointerClick -= Input_PointerClick;
+            _input.PointerDown -= Input_PointerClick;
             _input.PointerDrag -= Input_PointerDrag;
         }
 
@@ -49,6 +49,7 @@ namespace Core.Game
                 if (_lastSelectedTile != tile)
                 {
                     _gameBoard.SwapTiles(_lastSelectedTile, tile);
+                    _lastSelectedTile = null;
                 }
             }
         }

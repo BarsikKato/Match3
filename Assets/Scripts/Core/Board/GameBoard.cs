@@ -25,6 +25,8 @@ namespace Core.Board
         private Vector2 _tileSize;
         private Vector2 _tileOrigin;
 
+        private bool _isTilesSwapping = false;
+
         public int RowCount => rowCount;
 
         public int ColumnCount => columnCount;
@@ -44,8 +46,6 @@ namespace Core.Board
             fillStrategy.Initialize(dependencyResolver);
             SetFillStrategy(fillStrategy);
             Fill();
-
-            SwapTiles(_grid[new BoardPosition(0, 0)], _grid[new BoardPosition(0, 1)]);
         }
 
         private void CreateBoardTiles(ITileFactory tileFactory)
@@ -103,11 +103,15 @@ namespace Core.Board
 
         public void SwapTiles(IGameTile tileA, IGameTile tileB)
         {
+            if (_isTilesSwapping)
+                return;
+
+            _isTilesSwapping = true;
             StartCoroutine(SwapAndMatchTilesRoutine(tileA, tileB));
         }
 
         private IEnumerator SwapAndMatchTilesRoutine(IGameTile tileA, IGameTile tileB)
-        {
+        {            
             yield return SwapTilesRoutine(tileA, tileB);
 
             bool isMatching = _matchStrategy.TryMatch(
@@ -123,6 +127,8 @@ namespace Core.Board
                 // Reverse movement
                 yield return SwapTilesRoutine(tileA, tileB);
             }
+
+            _isTilesSwapping = false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

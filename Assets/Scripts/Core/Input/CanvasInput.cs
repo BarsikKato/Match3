@@ -4,16 +4,17 @@ using UnityEngine.EventSystems;
 
 namespace Core.Input
 {
-    public sealed class CanvasInput : MonoBehaviour, IInput, IPointerClickHandler, IDragHandler
+    public sealed class CanvasInput : MonoBehaviour, IInput, IPointerDownHandler, IDragHandler
     {
-        public event Action<Vector2> PointerClick;
+        public event Action<Vector2> PointerDown;
         public event Action<Vector2> PointerDrag;
 
         [SerializeField] private new Camera camera;
+        [SerializeField] private Canvas canvas;
 
-        public void OnPointerClick(PointerEventData eventData)
+        public void OnPointerDown(PointerEventData eventData)
         {
-            PointerClick?.Invoke(GetWorldPosition(eventData.position));
+            PointerDown?.Invoke(GetWorldPosition(eventData.position));
         }
 
         public void OnDrag(PointerEventData eventData)
@@ -23,7 +24,7 @@ namespace Core.Input
 
         private Vector2 GetWorldPosition(Vector2 canvasPosition)
         {
-            return camera.ScreenToWorldPoint(canvasPosition);
+            return camera.ScreenToWorldPoint(canvasPosition * canvas.scaleFactor);
         }
     }
 }

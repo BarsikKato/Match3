@@ -5,7 +5,7 @@ namespace Core.Input
 {
     public interface IInput
     {
-        event Action<Vector2> PointerClick;
+        event Action<Vector2> PointerDown;
 
         event Action<Vector2> PointerDrag;
     }

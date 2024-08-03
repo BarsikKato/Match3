@@ -6,11 +6,13 @@ namespace Core.Items
 {
     public sealed class GameItem : MonoBehaviour, IGameItem
     {
+        public const int UnmatchableType = -1;
         private const float SwapTime = 0.25f;
 
         [SerializeField] private SpriteRenderer spriteRenderer;
 
         private int _type;
+
         public int Type => _type;
 
         public IEnumerator SetPositionTo(Vector2 position)
@@ -30,6 +32,10 @@ namespace Core.Items
         public void SetVisible(bool value)
         {
             spriteRenderer.enabled = value;
+            if (value == false)
+            {
+                SetType(UnmatchableType, null);
+            }
         }
 
         public void SetType(int type, Sprite sprite)
