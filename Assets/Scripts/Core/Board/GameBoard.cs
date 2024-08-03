@@ -25,6 +25,8 @@ namespace Core.Board
         private Vector2 _tileSize;
         private Vector2 _tileOrigin;
 
+        private bool _isTilesSwapping = false;
+
         public int RowCount => rowCount;
 
         public int ColumnCount => columnCount;
@@ -44,8 +46,6 @@ namespace Core.Board
             fillStrategy.Initialize(dependencyResolver);
             SetFillStrategy(fillStrategy);
             Fill();
-
-            SwapTiles(_grid[new BoardPosition(0, 0)], _grid[new BoardPosition(0, 1)]);
         }
 
         private void CreateBoardTiles(ITileFactory tileFactory)
@@ -79,7 +79,7 @@ namespace Core.Board
 
         public Vector2 GetWorldPosition(int row, int column)
         {
-            return _tileOrigin + new Vector2(row * _tileSize.x, column * -_tileSize.y);
+            return _tileOrigin + new Vector2(column * _tileSize.x, row * -_tileSize.y);
         }
 
         public IGameTile GetTile(int row, int column)
@@ -103,11 +103,15 @@ namespace Core.Board
 
         public void SwapTiles(IGameTile tileA, IGameTile tileB)
         {
+            if (_isTilesSwapping)
+                return;
+
+            _isTilesSwapping = true;
             StartCoroutine(SwapAndMatchTilesRoutine(tileA, tileB));
         }
 
         private IEnumerator SwapAndMatchTilesRoutine(IGameTile tileA, IGameTile tileB)
-        {
+        {            
             yield return SwapTilesRoutine(tileA, tileB);
 
             bool isMatching = _matchStrategy.TryMatch(
@@ -123,6 +127,8 @@ namespace Core.Board
                 // Reverse movement
                 yield return SwapTilesRoutine(tileA, tileB);
             }
+
+            _isTilesSwapping = false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -162,6 +168,14 @@ namespace Core.Board
         public void SetMatchStrategy(IMatchStrategy matchStrategy)
         {
             _matchStrategy = matchStrategy;
+        }
+
+        public bool TryGetBoardPosition(Vector2 worldPosition, out int row, out int column)
+        {
+            Vector2 halfSize = _tileSize / 2f;
+            row = (int)Mathf.Floor(-(worldPosition - _tileOrigin).y + halfSize.y);
+            column = (int)Mathf.Floor((worldPosition - _tileOrigin).x + halfSize.x);
+            return row >= 0 && column >= 0;
         }
     }
 }

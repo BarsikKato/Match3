@@ -13,5 +13,12 @@ namespace Core.Abstractions
         {
             return board.GetWorldPosition(boardPosition.Row, boardPosition.Column);
         }
+
+        public static bool TryGetBoardPosition(this IGameBoard board, Vector2 worldPosition, out BoardPosition boardPosition)
+        {
+            bool isSuccess = board.TryGetBoardPosition(worldPosition, out int row, out int column);
+            boardPosition = new BoardPosition(row, column);
+            return isSuccess;
+        }
     }
 }

@@ -1,4 +1,5 @@
 using Core.Abstractions;
+using Core.Items;
 using DependencyResolving;
 using System.Collections.Generic;
 using UnityEngine;
@@ -72,7 +73,11 @@ namespace Core.Match
 
         private bool IsTilesMatching(IGameTile tileA, IGameTile tileB) 
         {
-            return tileA.CurrentItem.Type == tileB.CurrentItem.Type;
+            int itemAType = tileA.CurrentItem.Type;
+            int itemBType = tileB.CurrentItem.Type;
+            return itemAType == itemBType
+                && itemAType != GameItem.UnmatchableType
+                && itemBType != GameItem.UnmatchableType;
         }
     }
 }
