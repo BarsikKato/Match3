@@ -48,6 +48,11 @@ namespace Core.Board
             Fill();
         }
 
+        private void Fill()
+        {
+            _fillStrategy.FillBoard();
+        }
+
         private void CreateBoardTiles(ITileFactory tileFactory)
         {
             for (int row = 0; row < rowCount; row++)
@@ -91,11 +96,6 @@ namespace Core.Board
             return _grid[requestedPosition];
         }
 
-        public void Fill()
-        {
-            _fillStrategy.FillBoard();
-        }
-
         public void SetFillStrategy(IFillStrategy fillStrategy)
         {
             _fillStrategy = fillStrategy;
@@ -114,13 +114,21 @@ namespace Core.Board
         {            
             yield return SwapTilesRoutine(tileA, tileB);
 
-            bool isMatching = _matchStrategy.TryMatch(
-                tileA, tileB, out var matchA, out var matchB);
-
-            if (isMatching)
+            bool isAnyMatches = false;
+            if (_matchStrategy.TryFindMatchingTiles(tileA, out var matchA))
             {
                 ClearMatchedTiles(matchA);
+                isAnyMatches = true;
+            }
+
+            if (_matchStrategy.TryFindMatchingTiles(tileB, out var matchB))
+            {
                 ClearMatchedTiles(matchB);
+                isAnyMatches = true;
+            }
+
+            if (isAnyMatches)
+            {
                 Fill();
             }
             else
@@ -179,7 +187,7 @@ namespace Core.Board
             Vector2 halfSize = _tileSize / 2f;
             row = (int)Mathf.Floor(-(worldPosition - _tileOrigin).y + halfSize.y);
             column = (int)Mathf.Floor((worldPosition - _tileOrigin).x + halfSize.x);
-            return row >= 0 && column >= 0;
+            return _grid.ContainsKey(new BoardPosition(row, column));
         }
     }
 }
