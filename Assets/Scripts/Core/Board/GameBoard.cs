@@ -5,6 +5,7 @@ using Match3.Core.Tiles.Factory;
 using Match3.DependencyResolving;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -117,18 +118,19 @@ namespace Match3.Core.Board
             bool isAnyMatches = false;
             if (_matchStrategy.TryFindMatchingTiles(tileA, out var matchA))
             {
-                ClearMatchedTiles(matchA);
                 isAnyMatches = true;
             }
 
             if (_matchStrategy.TryFindMatchingTiles(tileB, out var matchB))
             {
-                ClearMatchedTiles(matchB);
                 isAnyMatches = true;
             }
 
             if (isAnyMatches)
             {
+                List<IGameTile> allMatches = matchA.Concat(matchB).ToList();
+                ClearMatchedTiles(allMatches);
+
                 bool anyMoreMatchings;
                 do
                 {
