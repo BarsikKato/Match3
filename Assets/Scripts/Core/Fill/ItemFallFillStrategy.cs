@@ -90,7 +90,17 @@ namespace Match3.Core.Fill
         private IEnumerator GenerateNewItem(IGameTile tile, BoardPosition boardPosition)
         {
             BoardPosition generatorPosition = new BoardPosition(-1, tile.Column);
+        rewind:
             IGameItem item = _gameItemPool.GetItem();
+            IGameTile leftTile = _gameBoard.GetTile(boardPosition.LeftPosition);
+            IGameTile downTile = _gameBoard.GetTile(boardPosition.DownPosition);
+            if (leftTile != null && leftTile.CurrentItem.Type == item.Type
+                || downTile != null && downTile.CurrentItem.Type == item.Type)
+            {
+                _gameItemPool.AddItem(item);
+                goto rewind;
+            }
+
             item.SetPositionTo(
                 _gameBoard.GetWorldPosition(generatorPosition)).FullyIterate();
 
