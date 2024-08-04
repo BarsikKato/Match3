@@ -4,6 +4,7 @@ using Match3.Core.Tiles;
 using Match3.DependencyResolving;
 using Match3.Extensions;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Match3.Core.Fill
@@ -29,6 +30,12 @@ namespace Match3.Core.Fill
         public void FillBoard()
         {
             IsBoardFilled = false;
+            _coroutineRunner.StartCoroutine(FillBoardRoutine());
+        }
+
+        public IEnumerator FillBoardRoutine()
+        {
+            List<Coroutine> awaitedCoroutines = new List<Coroutine>();
             for (int column = 0; column < _maxBoardPosition.Column; column++)
             {
                 for (int row = _maxBoardPosition.Row - 1; row >= 0; row--)
@@ -52,28 +59,35 @@ namespace Match3.Core.Fill
 
                     if (IsAnyItemUp(boardPosition, out IGameTile tileWithItem))
                     {
-                        DropItemDown(tile, tileWithItem);
+                        Coroutine coroutine = _coroutineRunner.StartCoroutine(DropItemDown(tile, tileWithItem));
+                        awaitedCoroutines.Add(coroutine);
                     }
                     else
                     {
-                        GenerateNewItem(tile, boardPosition);
+                        Coroutine coroutine = _coroutineRunner.StartCoroutine(GenerateNewItem(tile, boardPosition));
+                        awaitedCoroutines.Add(coroutine);
                     }
                 }
+            }
+
+            foreach (Coroutine coroutine in awaitedCoroutines)
+            {
+                yield return coroutine;
             }
 
             IsBoardFilled = true;
         }
 
-        private void DropItemDown(IGameTile tile, IGameTile upTileWithItem)
+        private IEnumerator DropItemDown(IGameTile tile, IGameTile upTileWithItem)
         {
             IGameItem upItem = upTileWithItem.CurrentItem;
             upTileWithItem.SetItem(null);
 
             tile.SetItem(upItem);
-            MoveItemDown(upItem, tile);
+            yield return MoveItemDown(upItem, tile);
         }
 
-        private void GenerateNewItem(IGameTile tile, BoardPosition boardPosition)
+        private IEnumerator GenerateNewItem(IGameTile tile, BoardPosition boardPosition)
         {
             BoardPosition generatorPosition = new BoardPosition(-1, tile.Column);
             IGameItem item = _gameItemPool.GetItem();
@@ -82,14 +96,14 @@ namespace Match3.Core.Fill
 
             tile.SetItem(item);
             Vector2 worldPosition = _gameBoard.GetWorldPosition(boardPosition);
-            _coroutineRunner.StartCoroutine(item.SetPositionTo(worldPosition));
+            yield return _coroutineRunner.StartCoroutine(item.SetPositionTo(worldPosition));
         }
 
-        private void MoveItemDown(IGameItem item, IGameTile downTile)
+        private IEnumerator MoveItemDown(IGameItem item, IGameTile downTile)
         {
             Vector2 nextPosition = _gameBoard.GetWorldPosition(downTile.GetBoardPosition());
             IEnumerator fallingRoutine = item.SetPositionTo(nextPosition);
-            _coroutineRunner.StartCoroutine(fallingRoutine);
+            yield return _coroutineRunner.StartCoroutine(fallingRoutine);
         }
 
         private bool IsAnyItemUp(BoardPosition boardPosition, out IGameTile tileWithItem)

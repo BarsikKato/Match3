@@ -129,7 +129,24 @@ namespace Match3.Core.Board
 
             if (isAnyMatches)
             {
-                Fill();
+                bool anyMoreMatchings;
+                do
+                {
+                    anyMoreMatchings = false;
+                    Fill();
+                    WaitUntil waitUntilFilled = new WaitUntil(() => _fillStrategy.IsBoardFilled);
+                    yield return waitUntilFilled;
+                    foreach (var tile in _grid.Values)
+                    {
+                        if (_matchStrategy.TryFindMatchingTiles(tile, out var matches))
+                        {
+                            ClearMatchedTiles(matches);
+                            anyMoreMatchings = true;
+                            break;
+                        }
+                    }
+                }
+                while (anyMoreMatchings);
             }
             else
             {
@@ -137,8 +154,6 @@ namespace Match3.Core.Board
                 yield return SwapTilesRoutine(tileA, tileB);
             }
 
-            WaitUntil waitUntilFilled = new WaitUntil(() => _fillStrategy.IsBoardFilled);
-            yield return waitUntilFilled;
             _isTilesSwapping = false;
         }
 
