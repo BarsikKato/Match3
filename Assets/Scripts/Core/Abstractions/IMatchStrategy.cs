@@ -4,10 +4,9 @@ namespace Core.Abstractions
 {
     public interface IMatchStrategy
     {
-        bool TryMatch(
-            IGameTile tileA, IGameTile tileB, 
-            out IReadOnlyCollection<IGameTile> matchA,
-            out IReadOnlyCollection<IGameTile> matchB);
+        bool TryFindMatchingTiles(
+            IGameTile tile, 
+            out IReadOnlyCollection<IGameTile> match);
     }
 }
 

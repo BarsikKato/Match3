@@ -14,8 +14,6 @@ namespace Core.Abstractions
 
         bool TryGetBoardPosition(Vector2 worldPosition, out int row, out int column);
 
-        void Fill();
-
         void SetFillStrategy(IFillStrategy fillStrategy);
 
         void SwapTiles(IGameTile tileA, IGameTile tileB);

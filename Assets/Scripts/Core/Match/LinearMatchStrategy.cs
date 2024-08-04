@@ -26,16 +26,12 @@ namespace Core.Match
             _board.SetMatchStrategy(this);
         }
 
-        public bool TryMatch(
-            IGameTile tileA, 
-            IGameTile tileB, 
-            out IReadOnlyCollection<IGameTile> matchA, 
-            out IReadOnlyCollection<IGameTile> matchB)
+        public bool TryFindMatchingTiles(
+            IGameTile tile, 
+            out IReadOnlyCollection<IGameTile> match)
         {
-            matchA = FindMatchingTiles(tileA);
-            matchB = FindMatchingTiles(tileB);
-            return matchA.Count > 1 
-                || matchB.Count > 1;
+            match = FindMatchingTiles(tile);
+            return match.Count > 1;
         }
 
         private IReadOnlyCollection<IGameTile> FindMatchingTiles(IGameTile tile)
