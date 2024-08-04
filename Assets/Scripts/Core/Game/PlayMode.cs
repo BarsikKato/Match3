@@ -45,7 +45,7 @@ namespace Core.Game
             if (_gameBoard.TryGetBoardPosition(position, out BoardPosition boardPosition))
             {
                 IGameTile tile = _gameBoard.GetTile(boardPosition);
-                if (_lastSelectedTile != tile)
+                if (tile != null && _lastSelectedTile != tile)
                 {
                     _gameBoard.SwapTiles(_lastSelectedTile, tile);
                     _lastSelectedTile = null;

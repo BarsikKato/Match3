@@ -34,28 +34,30 @@ namespace Core.Match
         {
             matchA = FindMatchingTiles(tileA);
             matchB = FindMatchingTiles(tileB);
-            return matchA.Count > 0 || matchB.Count > 0;
+            return matchA.Count > 1 
+                || matchB.Count > 1;
         }
 
         private IReadOnlyCollection<IGameTile> FindMatchingTiles(IGameTile tile)
         {
-            List<IGameTile> matchingTiles = new List<IGameTile>();
+            List<IGameTile> verticalMatchings = new List<IGameTile>();
+            List<IGameTile> horizontalMatchings = new List<IGameTile>();
             foreach (var direction in _directions)
             {
-                IReadOnlyCollection<IGameTile> directionTiles = 
-                    FindMatchingTilesInDirection(tile, direction);
+                List<IGameTile> matchingList = 
+                    direction.Equals(BoardPosition.Up) || direction.Equals(BoardPosition.Down)
+                    ? verticalMatchings 
+                    : horizontalMatchings;
 
-                if (directionTiles.Count >= requiredCount)
-                    matchingTiles.AddRange(directionTiles);
+                    FindMatchingTilesInDirection(tile, direction, matchingList);
             }
 
-            return matchingTiles;
+            return GetMatchingsCollection(tile, verticalMatchings, horizontalMatchings);
         }
 
-        private IReadOnlyCollection<IGameTile> FindMatchingTilesInDirection(
-            IGameTile tile, BoardPosition direction)
+        private void FindMatchingTilesInDirection(
+            IGameTile tile, BoardPosition direction, List<IGameTile> matchingTiles)
         {
-            List<IGameTile> matchingTiles = new() { tile };
             BoardPosition currentPosition = new BoardPosition(tile.Row, tile.Column);
             while (true)
             {
@@ -67,8 +69,6 @@ namespace Core.Match
                 matchingTiles.Add(nextTile);
                 currentPosition = nextPosition;
             }
-
-            return matchingTiles;
         }
 
         private bool IsTilesMatching(IGameTile tileA, IGameTile tileB) 
@@ -78,6 +78,27 @@ namespace Core.Match
             return itemAType == itemBType
                 && itemAType != GameItem.UnmatchableType
                 && itemBType != GameItem.UnmatchableType;
+        }
+
+        private IReadOnlyCollection<IGameTile> GetMatchingsCollection(
+            IGameTile tile, List<IGameTile> verticalMatchings, List<IGameTile> horizontalMatchings)
+        {
+            List<IGameTile> result = new List<IGameTile>();
+            int requiredCountInDirection = requiredCount - 1;
+            if (verticalMatchings.Count >= requiredCountInDirection)
+            {
+                result.AddRange(verticalMatchings);
+            }
+
+            if (horizontalMatchings.Count >= requiredCountInDirection)
+            {
+                result.AddRange(horizontalMatchings);
+            }
+
+            if (result.Count > 0)
+                result.Add(tile);
+
+            return result;
         }
     }
 }
