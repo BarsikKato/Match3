@@ -1,12 +1,12 @@
-using Core.Abstractions;
-using Core.Items;
-using Core.Tiles;
-using DependencyResolving;
-using Extensions;
+using Match3.Abstractions;
+using Match3.Core.Items;
+using Match3.Core.Tiles;
+using Match3.DependencyResolving;
+using Match3.Extensions;
 using System.Collections;
 using UnityEngine;
 
-namespace Core.Fill
+namespace Match3.Core.Fill
 {
     public sealed class ItemFallFillStrategy : IFillStrategy
     {

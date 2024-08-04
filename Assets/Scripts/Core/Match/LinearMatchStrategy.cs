@@ -1,10 +1,10 @@
-using Core.Abstractions;
-using Core.Items;
-using DependencyResolving;
+using Match3.Abstractions;
+using Match3.Core.Items;
+using Match3.DependencyResolving;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core.Match
+namespace Match3.Core.Match
 {
     public sealed class LinearMatchStrategy : MonoBehaviour, IMatchStrategy
     {

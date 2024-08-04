@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.Abstractions
+namespace Match3.Abstractions
 {
     public interface IGameBoard
     {

@@ -1,8 +1,8 @@
-using Core.Abstractions;
+using Match3.Abstractions;
 using System.Collections;
 using UnityEngine;
 
-namespace Core.Items
+namespace Match3.Core.Items
 {
     public sealed class GameItem : MonoBehaviour, IGameItem
     {

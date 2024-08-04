@@ -1,8 +1,8 @@
-using Core.Abstractions;
-using Core.Input;
-using DependencyResolving;
+using Match3.Abstractions;
+using Match3.Core.Input;
+using Match3.DependencyResolving;
 
-namespace Core.Game
+namespace Match3.Core.Game
 {
     public class GameController
     {

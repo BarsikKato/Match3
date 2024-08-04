@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Core.Abstractions
+namespace Match3.Abstractions
 {
     public interface IGameItem
     {

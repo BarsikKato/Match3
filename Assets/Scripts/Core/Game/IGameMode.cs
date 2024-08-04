@@ -1,4 +1,4 @@
-namespace Core.Game
+namespace Match3.Core.Game
 {
     public interface IGameMode
     {

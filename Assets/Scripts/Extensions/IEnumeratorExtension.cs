@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace Extensions
+namespace Match3.Extensions
 {
     public static class IEnumeratorExtension
     {

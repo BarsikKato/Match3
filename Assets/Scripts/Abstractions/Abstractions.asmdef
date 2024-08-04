@@ -1,5 +1,5 @@
 {
-    "name": "DependencyResolving",
+    "name": "Abstractions",
     "rootnamespace Match3.": "",
     "references": [],
     "includePlatforms": [],

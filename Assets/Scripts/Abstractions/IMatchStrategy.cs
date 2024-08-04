@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Core.Abstractions
+namespace Match3.Abstractions
 {
     public interface IMatchStrategy
     {

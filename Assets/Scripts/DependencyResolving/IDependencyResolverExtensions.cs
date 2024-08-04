@@ -1,4 +1,4 @@
-namespace DependencyResolving
+namespace Match3.DependencyResolving
 {
     public static class IDependencyResolverExtensions
     {

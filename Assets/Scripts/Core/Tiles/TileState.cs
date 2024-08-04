@@ -1,4 +1,4 @@
-namespace Core.Tiles
+namespace Match3.Core.Tiles
 {
     public enum TileState
     {

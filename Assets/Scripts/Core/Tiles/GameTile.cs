@@ -1,7 +1,7 @@
-using Core.Abstractions;
+using Match3.Abstractions;
 using UnityEngine;
 
-namespace Core.Tiles
+namespace Match3.Core.Tiles
 {
     public sealed class GameTile : IGameTile
     {

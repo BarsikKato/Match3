@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Core.Input
+namespace Match3.Core.Input
 {
     public sealed class CanvasInput : MonoBehaviour, IInput, IPointerDownHandler, IDragHandler
     {

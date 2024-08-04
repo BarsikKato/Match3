@@ -1,15 +1,15 @@
-using Core.Abstractions;
-using Core.Board;
-using Core.Fill;
-using Core.Game;
-using Core.Input;
-using Core.Items;
-using Core.Match;
-using Core.Tiles.Factory;
-using DependencyResolving;
+using Match3.Abstractions;
+using Match3.Core.Board;
+using Match3.Core.Fill;
+using Match3.Core.Game;
+using Match3.Core.Input;
+using Match3.Core.Items;
+using Match3.Core.Match;
+using Match3.Core.Tiles.Factory;
+using Match3.DependencyResolving;
 using UnityEngine;
 
-namespace Core
+namespace Match3.Core
 {
     public sealed class GameRoot : MonoBehaviour
     {

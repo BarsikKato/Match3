@@ -1,6 +1,6 @@
-using Core.Abstractions;
+using Match3.Abstractions;
 
-namespace Core.Tiles.Factory
+namespace Match3.Core.Tiles.Factory
 {
     public interface ITileFactory
     {

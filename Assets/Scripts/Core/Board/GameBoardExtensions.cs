@@ -1,6 +1,7 @@
+using Match3.Abstractions;
 using UnityEngine;
 
-namespace Core.Abstractions
+namespace Match3.Core
 {
     public static class GameBoardExtensions
     {

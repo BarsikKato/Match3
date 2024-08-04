@@ -1,4 +1,4 @@
-namespace Core
+namespace Match3.Core
 {
     public readonly struct BoardPosition
     {

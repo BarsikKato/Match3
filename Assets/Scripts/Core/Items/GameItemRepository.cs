@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core.Items
+namespace Match3.Core.Items
 {
     [CreateAssetMenu(fileName = "Items Repository", menuName = "Game/Items Repository")]
     public sealed class GameItemRepository : ScriptableObject

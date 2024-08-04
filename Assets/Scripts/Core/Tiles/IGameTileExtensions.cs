@@ -1,6 +1,6 @@
-using Core.Abstractions;
+using Match3.Abstractions;
 
-namespace Core.Tiles
+namespace Match3.Core.Tiles
 {
     public static class IGameTileExtensions
     {

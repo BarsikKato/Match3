@@ -1,6 +1,6 @@
-using Core.Abstractions;
+using Match3.Abstractions;
 
-namespace Core.Items
+namespace Match3.Core.Items
 {
     public interface IGameItemPool
     {

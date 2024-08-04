@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Core.Input
+namespace Match3.Core.Input
 {
     public interface IInput
     {

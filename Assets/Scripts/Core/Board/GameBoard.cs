@@ -1,14 +1,14 @@
-using Core.Abstractions;
-using Core.Fill;
-using Core.Tiles;
-using Core.Tiles.Factory;
-using DependencyResolving;
+using Match3.Abstractions;
+using Match3.Core.Fill;
+using Match3.Core.Tiles;
+using Match3.Core.Tiles.Factory;
+using Match3.DependencyResolving;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Core.Board
+namespace Match3.Core.Board
 {
     public sealed class GameBoard : MonoBehaviour, IGameBoard
     {

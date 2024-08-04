@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace DependencyResolving
+namespace Match3.DependencyResolving
 {
     public sealed class DependencyResolver : IDependencyResolver
     {

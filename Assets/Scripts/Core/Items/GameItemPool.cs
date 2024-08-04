@@ -1,9 +1,9 @@
-using Core.Abstractions;
-using DependencyResolving;
+using Match3.Abstractions;
+using Match3.DependencyResolving;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core.Items
+namespace Match3.Core.Items
 {
     public sealed class GameItemPool : MonoBehaviour, IGameItemPool
     {

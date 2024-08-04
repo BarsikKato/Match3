@@ -1,6 +1,6 @@
 using System;
 
-namespace DependencyResolving
+namespace Match3.DependencyResolving
 {
     public interface IDependencyResolver : IDisposable
     {
