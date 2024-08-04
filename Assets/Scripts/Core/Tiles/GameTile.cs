@@ -6,7 +6,6 @@ namespace Core.Tiles
     public sealed class GameTile : IGameTile
     {
         private readonly BoardPosition _boardPosition;
-        private readonly Vector2 _worldPosition;
 
         public IGameItem CurrentItem { get; private set; }
 
@@ -16,10 +15,9 @@ namespace Core.Tiles
 
         public int Column => _boardPosition.Column;
 
-        public GameTile(BoardPosition boardPosition, Vector2 worldPosition)
+        public GameTile(BoardPosition boardPosition)
         {
             _boardPosition = boardPosition;
-            _worldPosition = worldPosition;
         }
 
         public void SetItem(IGameItem item)

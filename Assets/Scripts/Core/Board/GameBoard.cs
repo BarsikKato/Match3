@@ -43,7 +43,7 @@ namespace Core.Board
             CreateBoardTiles(tileFactory);
 
             ItemFallFillStrategy fillStrategy = new ItemFallFillStrategy();
-            fillStrategy.Initialize(dependencyResolver);
+            fillStrategy.Initialize(dependencyResolver, this);
             SetFillStrategy(fillStrategy);
             Fill();
         }
@@ -58,15 +58,15 @@ namespace Core.Board
                     tileSprite.transform.position = GetWorldPosition(row, column);
 
                     BoardPosition boardPosition = new BoardPosition(row, column);
-                    CreateBoardTile(tileFactory, boardPosition, tileSprite.transform.position);
+                    CreateBoardTile(tileFactory, boardPosition);
                 }
             }
         }
 
         private void CreateBoardTile(
-            ITileFactory factory, BoardPosition boardPosition, Vector2 worldPosition)
+            ITileFactory factory, BoardPosition boardPosition)
         {
-            IGameTile gameTile = factory.Create(boardPosition, worldPosition);
+            IGameTile gameTile = factory.Create(boardPosition);
             _grid.Add(boardPosition, gameTile);
         }
 
@@ -129,6 +129,8 @@ namespace Core.Board
                 yield return SwapTilesRoutine(tileA, tileB);
             }
 
+            WaitUntil waitUntilFilled = new WaitUntil(() => _fillStrategy.IsBoardFilled);
+            yield return waitUntilFilled;
             _isTilesSwapping = false;
         }
 
@@ -158,6 +160,7 @@ namespace Core.Board
             return new Coroutine[] { moveItemA, moveItemB };
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void ClearMatchedTiles(IReadOnlyCollection<IGameTile> matchingTiles)
         {
             foreach (var tile in matchingTiles)

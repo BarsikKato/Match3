@@ -2,7 +2,6 @@ using Core.Abstractions;
 using Core.Items;
 using DependencyResolving;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Core.Match
@@ -35,26 +34,25 @@ namespace Core.Match
         {
             matchA = FindMatchingTiles(tileA);
             matchB = FindMatchingTiles(tileB);
-            return matchA.Count > 0 || matchB.Count > 0;
+            return matchA.Count > 1 
+                || matchB.Count > 1;
         }
 
         private IReadOnlyCollection<IGameTile> FindMatchingTiles(IGameTile tile)
         {
-            List<IGameTile> verticalTiles = new List<IGameTile>() { tile };
-            List<IGameTile> horizontalTiles = new List<IGameTile>();
+            List<IGameTile> verticalMatchings = new List<IGameTile>();
+            List<IGameTile> horizontalMatchings = new List<IGameTile>();
             foreach (var direction in _directions)
             {
                 List<IGameTile> matchingList = 
                     direction.Equals(BoardPosition.Up) || direction.Equals(BoardPosition.Down)
-                    ? verticalTiles 
-                    : horizontalTiles;
+                    ? verticalMatchings 
+                    : horizontalMatchings;
 
                     FindMatchingTilesInDirection(tile, direction, matchingList);
             }
 
-            return verticalTiles
-                .Concat(horizontalTiles)
-                .ToList();
+            return GetMatchingsCollection(tile, verticalMatchings, horizontalMatchings);
         }
 
         private void FindMatchingTilesInDirection(
@@ -80,6 +78,27 @@ namespace Core.Match
             return itemAType == itemBType
                 && itemAType != GameItem.UnmatchableType
                 && itemBType != GameItem.UnmatchableType;
+        }
+
+        private IReadOnlyCollection<IGameTile> GetMatchingsCollection(
+            IGameTile tile, List<IGameTile> verticalMatchings, List<IGameTile> horizontalMatchings)
+        {
+            List<IGameTile> result = new List<IGameTile>();
+            int requiredCountInDirection = requiredCount - 1;
+            if (verticalMatchings.Count >= requiredCountInDirection)
+            {
+                result.AddRange(verticalMatchings);
+            }
+
+            if (horizontalMatchings.Count >= requiredCountInDirection)
+            {
+                result.AddRange(horizontalMatchings);
+            }
+
+            if (result.Count > 0)
+                result.Add(tile);
+
+            return result;
         }
     }
 }

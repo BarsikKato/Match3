@@ -19,11 +19,13 @@ namespace Core.Items
         {
             float time = 0;
             Vector2 startPosition = transform.position;
-            float distance = Vector2.Distance(startPosition, position);
+            float distanceMultiplier = 
+                Vector2.Distance(startPosition, position);
+
             while (time <= 1)
             {
                 transform.position = Vector2.Lerp(startPosition, position, time);
-                time += Time.deltaTime / (SwapTime * distance);
+                time += Time.deltaTime * distanceMultiplier / SwapTime;
                 yield return null;
             }
 
