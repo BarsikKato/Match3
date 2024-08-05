@@ -115,21 +115,11 @@ namespace Match3.Core.Board
         {            
             yield return SwapTilesRoutine(tileA, tileB);
 
-            bool isAnyMatches = false;
-            if (_matchStrategy.TryFindMatchingTiles(tileA, out var matchA))
-            {
-                isAnyMatches = true;
-            }
-
-            if (_matchStrategy.TryFindMatchingTiles(tileB, out var matchB))
-            {
-                isAnyMatches = true;
-            }
-
-            if (isAnyMatches)
+            if (_matchStrategy.TryFindMatchingTiles(tileA, out var matchA) |
+                _matchStrategy.TryFindMatchingTiles(tileB, out var matchB))
             {
                 List<IGameTile> allMatches = matchA.Concat(matchB).ToList();
-                ClearMatchedTiles(allMatches);
+                ClearTiles(allMatches);
 
                 bool anyMoreMatchings;
                 do
@@ -138,15 +128,8 @@ namespace Match3.Core.Board
                     Fill();
                     WaitUntil waitUntilFilled = new WaitUntil(() => _fillStrategy.IsBoardFilled);
                     yield return waitUntilFilled;
-                    foreach (var tile in _grid.Values)
-                    {
-                        if (_matchStrategy.TryFindMatchingTiles(tile, out var matches))
-                        {
-                            ClearMatchedTiles(matches);
-                            anyMoreMatchings = true;
-                            break;
-                        }
-                    }
+                    anyMoreMatchings = HasAdditionalMatchings(out var presentedMatches);
+                    ClearTiles(presentedMatches);
                 }
                 while (anyMoreMatchings);
             }
@@ -157,6 +140,27 @@ namespace Match3.Core.Board
             }
 
             _isTilesSwapping = false;
+        }
+
+        /// <summary>
+        /// Checks if any more matchings present on the board.
+        /// </summary>
+        /// <returns>Is matchings present</returns>
+        private bool HasAdditionalMatchings(out IReadOnlyCollection<IGameTile> presentedMatches)
+        {
+            bool hasAdditionalMatchings = false;
+            List<IGameTile> allMatches = new List<IGameTile>();
+            foreach (var tile in _grid.Values)
+            {
+                if (_matchStrategy.TryFindMatchingTiles(tile, out var matches))
+                {
+                    allMatches.AddRange(matches);
+                    hasAdditionalMatchings = true;
+                }
+            }
+
+            presentedMatches = allMatches;
+            return hasAdditionalMatchings;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -186,9 +190,9 @@ namespace Match3.Core.Board
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void ClearMatchedTiles(IReadOnlyCollection<IGameTile> matchingTiles)
+        private void ClearTiles(IReadOnlyCollection<IGameTile> tiles)
         {
-            foreach (var tile in matchingTiles)
+            foreach (var tile in tiles)
             {
                 tile.CurrentItem.SetVisible(false);
             }
