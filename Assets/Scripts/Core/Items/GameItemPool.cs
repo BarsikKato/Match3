@@ -30,6 +30,7 @@ namespace Match3.Core.Items
 
         public void AddItem(IGameItem item)
         {
+            item.SetVisible(false);
             _itemsPool.Enqueue(item);
         }
 
