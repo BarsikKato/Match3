@@ -10,7 +10,7 @@ In this project, you can see the following mechanics:
 
 **Note**: This project does not implement any score logic or advanced game features like power-ups or levels.
 
-![](https://github.com/BarsikKato/Match3/blob/develop/example.gif)
+![](https://github.com/BarsikKato/Match3/blob/main/example.gif)
 ## Scripts
 The ***"Scripts"*** folder consists of 4 subfolder:
 1. **Abstractions** - Contains basic abstractions of the game.
